@@ -8,6 +8,7 @@ void ScriptMain() {
 	Ped current = playerPed;
 	int health = ENTITY::GET_ENTITY_HEALTH(current);
 	int armor = PED::GET_PED_ARMOUR(current);
+	bool just_died = false;
 
 	while (true) {
 		Player player = PLAYER::PLAYER_ID();
@@ -20,8 +21,15 @@ void ScriptMain() {
 		}
 
 		if (PED::IS_PED_DEAD_OR_DYING(current, true)) {
+			just_died = true;
 			WAIT(0);
 			continue;
+		}
+
+		if (just_died) {
+			health = ENTITY::GET_ENTITY_HEALTH(current);
+			armor = PED::GET_PED_ARMOUR(current);
+			just_died = false;
 		}
 
 		if (PED::IS_PED_MODEL(current, Trevor) && PLAYER::IS_SPECIAL_ABILITY_ACTIVE(player)) {
