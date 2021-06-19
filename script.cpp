@@ -4,6 +4,8 @@ const Hash Trevor = 2608926626u;
 bool mod_active = true;
 bool mod_training = true;
 bool mod_needs_init = true;
+bool mod_manual = false;
+int hit_count = 0;
 
 
 void ScriptMain() {
@@ -12,7 +14,6 @@ void ScriptMain() {
 	int max_armour, armour;
 	std::string mod_status;
 	std::string hit_count_str;
-	int hit_count = 0;
 
 	while (true) {
 		if (mod_active) {
@@ -24,6 +25,7 @@ void ScriptMain() {
 				armour = PED::GET_PED_ARMOUR(current_ped);
 				max_armour = PLAYER::GET_PLAYER_MAX_ARMOUR(PLAYER::PLAYER_ID());
 				mod_needs_init = false;
+				mod_manual = false;
 				hit_count = 0;
 			}
 
@@ -103,7 +105,7 @@ void ScriptMain() {
 
 		// Display on screen
 		mod_status = std::string("1HKO") + (mod_training ? " (train)" : "") + ": " + (mod_active ? "ON" : "OFF");
-		hit_count_str = std::string("Hits: ") + std::to_string(hit_count);
+		hit_count_str = std::string("Hits") + (mod_manual ? " (manual)" : "") + ": " + std::to_string(hit_count);
 		DrawTextToScreen(mod_status.c_str(), 0.9f, 0.5f, 0.3f, eFont::FontChaletLondon, false, 255, 255, 255);
 		DrawTextToScreen(hit_count_str.c_str(), 0.9f, 0.53f, 0.3f, eFont::FontChaletLondon, false, 255, 255, 255);
 
@@ -115,7 +117,7 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended
 	if (!is_up_now) {
 		// activate 1HKO
 		if (key == 0x4B) { // Key K
-			mod_active = !mod_active;
+			mod_active = !mod_active;	
 
 			if (mod_active)
 				mod_needs_init = true;
@@ -123,6 +125,18 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended
 		// activate training mode
 		else if (key == 0x4A)
 			mod_training = !mod_training;
+	}
+	else {
+		if (is_with_alt && key == VK_ADD) {
+			mod_manual = true;
+			hit_count++;
+		}
+		else if (is_with_alt && key == VK_SUBTRACT) {
+			if (hit_count > 0) {
+				mod_manual = true;
+				hit_count--;
+			}
+		}
 	}
 }
 
