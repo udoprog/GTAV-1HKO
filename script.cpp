@@ -7,6 +7,8 @@ bool mod_needs_init = true;
 bool mod_manual = false;
 int hit_count = 0;
 
+bool control_key_pressed = false;
+
 
 void ScriptMain() {
 	Ped current_ped;
@@ -114,9 +116,28 @@ void ScriptMain() {
 }
 
 void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended, BOOL is_with_alt, BOOL was_down_before, BOOL is_up_now) {
-	if (!is_up_now) {
+	if (is_up_now) {
+		if (key == VK_CONTROL)
+			control_key_pressed = false;
+	}
+	else {
+		if (key == VK_CONTROL)
+			control_key_pressed = true;
+
+		// Decrease hit count
+		else if (control_key_pressed && key == 0x4A) { // Ctrl + Key J
+			if (hit_count > 0) {
+				mod_manual = true;
+				hit_count--;
+			}
+		}
+		// Increase hit count
+		else if (control_key_pressed && key == 0x4B) { // Ctrl + Key K
+			mod_manual = true;
+			hit_count++;
+		}
 		// activate 1HKO
-		if (key == 0x4B) { // Key K
+		else if (key == 0x4B) { // Key K
 			mod_active = !mod_active;	
 
 			if (mod_active)
@@ -125,18 +146,6 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended
 		// activate training mode
 		else if (key == 0x4A)
 			mod_training = !mod_training;
-	}
-	else {
-		if (is_with_alt && key == VK_ADD) {
-			mod_manual = true;
-			hit_count++;
-		}
-		else if (is_with_alt && key == VK_SUBTRACT) {
-			if (hit_count > 0) {
-				mod_manual = true;
-				hit_count--;
-			}
-		}
 	}
 }
 
