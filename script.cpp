@@ -16,6 +16,7 @@ void ScriptMain() {
 	int max_armour, armour;
 	std::string mod_status;
 	std::string hit_count_str;
+	bool trevor_ability_was_locked = false;
 
 	while (true) {
 		if (mod_active) {
@@ -55,9 +56,10 @@ void ScriptMain() {
 				continue;
 			}
 
-			// deplete Trevor special ability
-			if (PED::IS_PED_MODEL(current_ped, Trevor) && PLAYER::IS_SPECIAL_ABILITY_ACTIVE(player)) {
-				PLAYER::SPECIAL_ABILITY_DEPLETE_METER(player, true);
+			// disable Trevor special ability
+			if (PED::IS_PED_MODEL(current_ped, Trevor) && PLAYER::IS_SPECIAL_ABILITY_UNLOCKED(Trevor)) {
+				PLAYER::SPECIAL_ABILITY_LOCK(Trevor);
+				trevor_ability_was_locked = true;
 			}
 
 			// change max health if it changed.
@@ -102,6 +104,16 @@ void ScriptMain() {
 				else
 					ENTITY::SET_ENTITY_HEALTH(current_ped, 0);
 				hit_count++;
+			}
+		}
+		else
+		{
+			// unlock trevor special ability only if it was locked by the mod
+			if (trevor_ability_was_locked) {
+				if (!PLAYER::IS_SPECIAL_ABILITY_UNLOCKED(Trevor)) {
+					PLAYER::SPECIAL_ABILITY_UNLOCK(Trevor);
+					trevor_ability_was_locked = false;
+				}
 			}
 		}
 
