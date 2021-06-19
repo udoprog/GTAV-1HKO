@@ -126,14 +126,14 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended
 	}
 }
 
-void DrawTextToScreen(const std::string & text, float x, float y, float scale, eFont font, bool alignRight, int red, int green, int blue) {
+void DrawTextToScreen(const std::string & text, float x, float y, float scale, eFont font, bool align_right, int red, int green, int blue) {
 	// WARNING: Only the first 100 calls to this function are displayed!
 	UI::SET_TEXT_FONT((int)font);
 	UI::SET_TEXT_SCALE(scale, scale);
 	UI::SET_TEXT_COLOUR(red, green, blue, 255);
 	UI::SET_TEXT_WRAP(0.0, 1.0);
 	UI::SET_TEXT_CENTRE(false);
-	UI::SET_TEXT_RIGHT_JUSTIFY(alignRight);
+	UI::SET_TEXT_RIGHT_JUSTIFY(align_right);
 	UI::SET_TEXT_DROPSHADOW(2, 2, 0, 0, 0);
 	UI::SET_TEXT_EDGE(1, 0, 0, 0, 205);
 	UI::_SET_TEXT_ENTRY((char *) "STRING");
