@@ -4,6 +4,9 @@ A one-hit KO mod for GTA V (singleplayer).
 
 * You to die if you take any damage.
 * Trying to activate Trevor's power will drain it immediately.
+* Settings:
+  * Key **K**: Toggle on/off
+  * Key **J**: Toggle train mode
 
 ## Requirements
 
