@@ -17,8 +17,8 @@ A one-hit KO mod for GTA V (singleplayer).
   * You can modify the file while the game is running, just reload with **Ctrl+L** after your modifications
   * If you mess up the file, delete it and reload in game with **Ctrl+L**, it will be re-created
   * Parameters:
-    * offset_x: 0 is the left side of the screen, 1 is the right side (you won't see the out-of-the-screen text if you set it to 1)
-    * offset_y: 0 is the top side of the screen, 1 is the bottom side (you won't see the out-of-the-screen text if you set it to 1)
+    * offset_x: 0 is the left side of the screen, 1 is the right side (text will be out of the screen)
+    * offset_y: 0 is the top side of the screen, 1 is the bottom side (text will be out of the screen)
     * size: Text size
     * red: Red value (0 to 255) for the text colour
     * green: Green value (0 to 255) for the text colour
