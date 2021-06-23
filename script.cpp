@@ -20,8 +20,8 @@ bool control_key_pressed = false;
 
 
 void ScriptMain() {
-	PedStats previous;
-	PedStats current;
+	PedStats previous = { 0, 0, 0, 0, 0 };
+	PedStats current = { 0, 0, 0, 0, 0 };
 
 	// load/save settings
 	ReloadSettings();
@@ -63,7 +63,6 @@ void ScriptMain() {
 				trevor_ability_was_locked = true;
 			}
 
-
 			// change max health if it changed
 			if (previous.max_health != current.max_health) {
 				previous.max_health = current.max_health;
@@ -95,7 +94,13 @@ void ScriptMain() {
 				if (mod_training)
 					previous.health = current.health;
 				else
+				{
 					ENTITY::SET_ENTITY_HEALTH(current.ped, 0);
+					PED::SET_PED_ARMOUR(current.ped, 0);
+					// in case ped number is reused after death
+					previous.health = 0;
+					previous.armour = 0;
+				}
 				hit_count++;
 			}
 			// armour drop check
@@ -106,7 +111,13 @@ void ScriptMain() {
 				if (mod_training)
 					previous.armour = current.armour;
 				else
+				{
 					ENTITY::SET_ENTITY_HEALTH(current.ped, 0);
+					PED::SET_PED_ARMOUR(current.ped, 0);
+					// in case ped number is reused after death
+					previous.health = 0;
+					previous.armour = 0;
+				}
 				hit_count++;
 			}
 		}
