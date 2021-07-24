@@ -26,8 +26,10 @@ void ScriptMain() {
 	// load/save settings
 	ReloadSettings();
 
-	std::string mod_status, hit_count_str;
+	std::string mod_status, hit_count_str, display_str;
 	bool trevor_ability_was_locked = false;
+	
+	const std::string s_mod("1HKO"), s_death("Death"), s_deaths("Deaths"), s_hit("Hit"), s_hits("Hits");
 
 	while (true) {
 		if (mod_active) {
@@ -133,12 +135,12 @@ void ScriptMain() {
 		}
 
 		// display on screen
-		mod_status = std::string("1HKO") + (mod_training ? " (train)" : "") + ": " + (mod_active ? "ON" : "OFF");
-		hit_count_str = std::string("Hits") + (mod_manual ? " (manual)" : "") + ": " + std::to_string(hit_count);
-		DrawTextToScreen(mod_status.c_str(), disp_s.offset_x, disp_s.offset_y, disp_s.size,
-			disp_s.font, false,
-			disp_s.red, disp_s.green, disp_s.blue);
-		DrawTextToScreen(hit_count_str.c_str(), disp_s.offset_x, disp_s.offset_y + 0.02f, disp_s.size,
+		mod_status = s_mod + (mod_training ? " (train)" : "") + ": " + (mod_active ? "ON" : "OFF");
+		hit_count_str = (mod_training ? (hit_count > 0 ? s_hits : s_hit) : (hit_count > 0 ? s_deaths : s_death))
+						+ (mod_manual ? " (manual)" : "") + ": " + std::to_string(hit_count);
+		display_str = mod_status + "\n" + hit_count_str;
+
+		DrawTextToScreen(display_str.c_str(), disp_s.offset_x, disp_s.offset_y, disp_s.size,
 			disp_s.font, false,
 			disp_s.red, disp_s.green, disp_s.blue);
 
@@ -181,7 +183,7 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scan_code, BOOL is_extended
 			hit_count++;
 		}
 		// reload settings
-		else if (control_key_pressed && key == 0x4C) { // Ctrl + Key L
+		else if (control_key_pressed && key == 0x4D) { // Ctrl + Key M
 			ReloadSettings();
 		}
 		// activate 1HKO
